@@ -1,0 +1,14 @@
+<div align="center">
+  <h1> <b> <i> <%= @circle.name %> </i> </b> </h1>
+  <% @circle.users.each do |user| %> 
+    <% if user.user_circles.find_by(circle_id: @circle.id, user_id: user.id, teacher: true) != nil %>
+      <%nil%> 
+    <%else%>    
+      <h4> <%=user.email %> </h4>
+    <%end%>
+    
+
+
+
+  <%end%>
+</div>
