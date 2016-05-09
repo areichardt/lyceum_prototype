@@ -24,9 +24,11 @@ class BooksController < ApplicationController
   end 
 
   
+
   def destroy 
     @book = Book.find(params[:id])
-    @book.destroy
+    join_table = UserBook.find_by(user_id: current_user.id, book_id: @book.id)
+    @book.destroy & join_table.destroy
     flash[:success] = "Book Removed From Library"
     redirect_to '/books/index'
   end

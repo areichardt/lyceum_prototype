@@ -77,12 +77,15 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"> My Book Circles </a>
             <ul class="dropdown-menu" role="menu">
               <% current_user.circles.each do |circle| %>
+                
                  <% if UserCircle.find_by(circle_id: circle.id, user_id: current_user.id, teacher: true) %>
-                      <li><a href="/circles/<%=circle.id%>"> <font color="red"> <%= circle.name %> </font> </a> </li>     
+                     <li> <a href="/circles/<%=circle.id%>"> <font color="red"> <%= circle.name %> </font>  </a></li>     
                     <%else%> 
-                      <li><a href="/circles/<%=circle.id%>"> <%=circle.name %> </a> </li>
+                      <li><a href="/circles/<%=circle.id%>"> <%=circle.name %> </a>  </li>
                     <%end%>
-                 <%end%>
+                    
+                   <%end%>
+             
               <li><a href="/circles/new"> [Start New Circle]</a></li>
             </ul>
           </li>

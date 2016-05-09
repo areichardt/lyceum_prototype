@@ -1,13 +1,20 @@
 class CirclesController < ApplicationController
 
   def show 
-    @circle = Circle.find(params[:id])
-  end 
-
+   @circle = Circle.find(params[:id])
+  end
+  
   def new 
   end 
 
   def create
+    if params[:body]
+      Comment.create(body: params[:body], user_id: params[:user_id], circle_id: params[:circle_id])
+      redirect_to '/circles/#{params[:circle_id]}/discussion'
+    else 
+      nil
+    end
+    
     if params[:name]
      @circle = Circle.create(name: params[:name])
       UserCircle.create(circle_id: @circle.id, user_id: current_user.id, teacher: true) 
@@ -22,9 +29,26 @@ class CirclesController < ApplicationController
     end
   end
    
+  def update
+    @circle = Circle.find(params[:id])
+    join_table = UserCircle.find_by(circle_id: @circle.id, user_id: current_user.id)
+    join_table.destroy
+      if join_table.destroy
+        flash[:success] = "You left your circle: #{@circle.name}. That's alright, often the best discussions are with one's self.. "
+        redirect_to '/'
+      end  
+  end 
+  
 
   def search_for_circle
     @circles = Circle.where("name LIKE ?", "%" + params[:name] + "%")
   end 
+  
+  def discussion 
+    if params[:body]
+      Comment.create(body: params[:body], user_id: params[:user_id], circle_id: params[:circle_id])
+    end
+    @circle = Circle.find(params[:id])
+  end
 
 end

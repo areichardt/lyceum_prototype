@@ -1,14 +1,52 @@
+
+<div align="right"> 
+<h3> <%= link_to "Enter Discussion", "/circles/#{@circle.id}/discussion", class: "btn btn-default" %> </h3>
+</div>
+
+<div align = "right"> 
+  <%if UserCircle.find_by(circle_id: @circle.id, user_id: current_user.id, teacher: false) %> 
+    <%= link_to "Leave Circle", "/circles/#{@circle.id}", method: :patch, class: 'btn btn-default' %>
+  <%end%>
+</div> 
+<!-- shoudld be in a settings -->
+
+<div align = "center">
+  <div class="dropdown">
+       <span> <h2> See List of Materials </h2>  <span>  
+    <div class="dropdown-content">
+        <% @circle.users.each do |user| %>
+          <%if UserCircle.find_by(circle_id: @circle.id, user_id: user.id, teacher: true) %>
+            <% user.books.each do |book| %>
+            <%= book.id %>
+            <%end%>
+          <%else%>
+            <%nil%>
+          <%end%>
+        <%end%>
+        </div>
+    </div>
+  </div>
+
+
 <div align="center">
   <h1> <b> <i> <%= @circle.name %> </i> </b> </h1>
   <% @circle.users.each do |user| %> 
     <% if user.user_circles.find_by(circle_id: @circle.id, user_id: user.id, teacher: true) != nil %>
-      <%nil%> 
+      <%nil%>
     <%else%>    
       <h4> <%=user.email %> </h4>
     <%end%>
-    
-
-
-
   <%end%>
-</div>
+  
+  <div class="font" id="lesson_plan">
+     <h2> Assignment: </h2>
+     <h6> <%= @circle.lesson_plan %> </h6>
+  </div>
+ </div> 
+
+
+
+
+
+  
+
