@@ -30,13 +30,13 @@ class CirclesController < ApplicationController
   end
    
   def update
-    @circle = Circle.find(params[:id])
-    join_table = UserCircle.find_by(circle_id: @circle.id, user_id: current_user.id)
-    join_table.destroy
+    if params[:id]
+      join_table = UserCircle.find_by(circle_id: params[:id], user_id: current_user.id)
       if join_table.destroy
-        flash[:success] = "You left your circle: #{@circle.name}. That's alright, often the best discussions are with one's self.. "
-        redirect_to '/'
-      end  
+        flash[:success] = "You Left A Circle"
+      redirect_to '/'
+      end
+    end
   end 
   
 
@@ -50,5 +50,7 @@ class CirclesController < ApplicationController
     end
     @circle = Circle.find(params[:id])
   end
+
+
 
 end

@@ -1,14 +1,16 @@
 
 <div align="right"> 
-<h3> <%= link_to "Enter Discussion", "/circles/#{@circle.id}/discussion", class: "btn btn-default" %> </h3>
+<h3> <%= link_to "Enter Discussion", "/api/circles.json", class: "btn btn-default" %> </h3>
 </div>
+<p></p>
+<!-- "/circles/#{@circle.id}/discussion" -->
+<%if UserCircle.find_by(circle_id: @circle.id, user_id: current_user.id, teacher: true) %> 
+  <div align = "right">
+    <%= link_to "Add Material", "/books/new", class: 'btn btn-default' %>
+  </div>
+<%end%>
 
-<div align = "right"> 
-  <%if UserCircle.find_by(circle_id: @circle.id, user_id: current_user.id, teacher: false) %> 
-    <%= link_to "Leave Circle", "/circles/#{@circle.id}", method: :patch, class: 'btn btn-default' %>
-  <%end%>
-</div> 
-<!-- shoudld be in a settings -->
+
 
 <div align = "center">
   <div class="dropdown">

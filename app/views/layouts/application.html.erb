@@ -73,20 +73,32 @@
     
         <ul class="nav navbar-nav">
     
+        
           <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> My Classes </a>
+            <ul class="dropdown-menu" role="menu">
+              <% if UserCircle.find_by(user_id: current_user.id, teacher: true) != nil %>
+                <% UserCircle.where(user_id: current_user.id, teacher: true).each do |x| %>
+                  <li> <a href="/circles/<%=x.circle_id%>"> <font color="red"> <%= Circle.find_by(id: x.circle_id).name %> </font>  </a></li>     
+                  <%end%>
+                <%else%>
+                <li> <h3> You haven't started any classes! </h3> </li>
+                <%end%>
+               <li><a href="/circles/new"> [Start New Class] </a></li>
+             </ul>
+          </li>
+        
+
+         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"> My Book Circles </a>
             <ul class="dropdown-menu" role="menu">
-              <% current_user.circles.each do |circle| %>
-                
-                 <% if UserCircle.find_by(circle_id: circle.id, user_id: current_user.id, teacher: true) %>
-                     <li> <a href="/circles/<%=circle.id%>"> <font color="red"> <%= circle.name %> </font>  </a></li>     
-                    <%else%> 
-                      <li><a href="/circles/<%=circle.id%>"> <%=circle.name %> </a>  </li>
-                    <%end%>
-                    
-                   <%end%>
-             
-              <li><a href="/circles/new"> [Start New Circle]</a></li>
+                <% if UserCircle.find_by(user_id: current_user.id, teacher: false) != nil %>
+                  <% UserCircle.where(user_id: current_user.id, teacher: false).each do |x| %>
+                     <li> <a href="/circles/<%=x.circle_id%>"> <font color="blue"> <%= Circle.find_by(id: x.circle_id).name %> </font> </a></li>     
+                      <%end%>
+                  <%else%> 
+                      <li> You haven't joined any Lit Circles yet! </li>
+                  <%end%>
             </ul>
           </li>
     
@@ -137,14 +149,35 @@
           </li>
     
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Change Profile Picture</a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings</a>
             <ul class="dropdown-menu" role="menu">
-               <li><%= form_tag "/image/new", method: :post, multipart: true do %>
-                    <%= label_tag :image %>
-                    <%= file_field_tag :image %>
-                    <%= submit_tag "Update Profile Pic" %>
-               <%end%>
-              </li>
+               <li>
+                    <li class="dropdown">
+                      <h2> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Leave A Circle</a> </h2>
+                      <ul class="dropdown-menu" role="menu">
+                         <% current_user.circles.each do |circle| %>
+                           <% if UserCircle.find_by(user_id: current_user.id, circle_id: circle, teacher: true) != nil %>
+                                  <%nil%>
+                              <%else%> 
+                         <li><%= link_to "Leave #{circle.name}", "/circles/#{circle.id}", method: :patch %> </li>
+                              <%end%>
+                           <%end%>
+                      </ul>
+                    </li>
+                </li>
+                   
+                <li>
+                    <li class="dropdown">
+                      <h2> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Update Profile Pic</a> </h2>
+                      <ul class="dropdown-menu" role="menu">
+                        <li> <%= form_tag "/image/new", method: :post, multipart: true do %>
+                        <%= file_field_tag :image %>
+                        <%= submit_tag "Submit" %>
+                        <%end%>
+                        </li>
+                      </ul>
+                    </li>
+                  </li>
             </ul>
           </li>
               

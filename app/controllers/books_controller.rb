@@ -15,7 +15,7 @@ class BooksController < ApplicationController
     book_id: @book.id
     )
       
-    redirect_to "/books/index"
+    redirect_to[:back]
 
   end 
 
