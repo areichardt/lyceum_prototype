@@ -2,6 +2,7 @@ class BooksController < ApplicationController
   
   def index
     @books = Book.all 
+    # render 'epub_show.html.erb', :layout => false
   end 
 
   def new 
@@ -9,21 +10,20 @@ class BooksController < ApplicationController
   end 
 
   def create
+    
     @book = Book.create(book_params)
     table = UserBook.create(
     user_id: current_user.id,
     book_id: @book.id
     )
-      
-    redirect_to[:back]
-
+   
+    redirect_to '/'
   end 
 
   def show
-     @book = Book.find(params[:id])
+    @book = Book.find(params[:id])
+   
   end 
-
-  
 
   def destroy 
     @book = Book.find(params[:id])
@@ -34,10 +34,9 @@ class BooksController < ApplicationController
   end
 
   private
+  
   def book_params 
     params.require(:book).permit(:epub)
   end 
-
-
 
 end

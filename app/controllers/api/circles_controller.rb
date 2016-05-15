@@ -1,8 +1,10 @@
 class Api::CirclesController < ApplicationController
   
   def index
-    @circles = Circle.all
-    render 'index.json.jbuilder'
+    if current_user 
+      @circles = Circle.all
+      render 'index.json.jbuilder'
+end
   end 
   
   def show 

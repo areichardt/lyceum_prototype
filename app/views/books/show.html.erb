@@ -2,7 +2,12 @@
   <p> <%= link_to "Back to Library", "/books/index", class: 'btn btn-default' %> </p>
 </div>
 
-<div align="center" >
-  <h2> <%= EPUB::Parser.parse(@book.epub.path.to_s).metadata.title %> </h2>
-</div>
+<div align="center">
+  <h2> <%=EPUB::Parser.parse(@book.epub.path.to_s).metadata.title %> </h2>
+   <% #EPUB::Parser.parse(@book.epub.path.to_s).each_page_on_spine do |page| %> 
+   <%# page.content_document.nokogiri.inner_text   %>  
+   <!-- content_document.nokogiri.text -->
+  <%#end%>
+
   
+

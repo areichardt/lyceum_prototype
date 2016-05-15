@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   has_many :user_circles
   has_many :circles, through: :user_circles
   has_many :comments
+  has_many :user_images
+  has_many :images, through: :user_images
 
 has_attached_file :image, :path => ":rails_root/public/system/images/:attachment/:id/:basename_:style.:extension", :url => "/system/:attachment/:id/:basename_:style.:extension",
  :styles => {

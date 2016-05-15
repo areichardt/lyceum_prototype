@@ -2,22 +2,165 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
+  margin-bottom: 12px;
+} 
 
-  #lesson_plan { height:100%; 
-      padding:0;
-      margin:0; 
-      width:50%;
-      display:flex; 
-      flex-direction:column;
-    }
+.embed-container iframe,
+.embed-container object,
+.embed-container embed {
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%;
+  height: 50%;
+  
+}
+
+
+body {
+  font-family: 'Lucida Grande', 'Helvetica Neue', sans-serif;
+  font-size: 13px;
+}
+
+#comment_form input, #comment_form textarea {
+  border: 4px solid rgba(0,0,0,0.1);
+  padding: 8px 10px;
+  
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
+  outline: 0;
+}
+
+#comment_form textarea {
+  width: 350px;
+}
+
+#comment_form input[type="submit"] {
+  cursor: pointer;
+  background: -webkit-linear-gradient(top, #efefef, #ddd);
+  background: -moz-linear-gradient(top, #efefef, #ddd);
+  background: -ms-linear-gradient(top, #efefef, #ddd);
+  background: -o-linear-gradient(top, #efefef, #ddd);
+  background: linear-gradient(top, #efefef, #ddd);
+  color: #333;
+  text-shadow: 0px 1px 1px rgba(255,255,255,1);
+  border: 1px solid #ccc;
+}
+
+#comment_form input[type="submit"]:hover {
+  background: -webkit-linear-gradient(top, #eee, #ccc);
+  background: -moz-linear-gradient(top, #eee, #ccc);
+  background: -ms-linear-gradient(top, #eee, #ccc);
+  background: -o-linear-gradient(top, #eee, #ccc);
+  background: linear-gradient(top, #eee, #ccc);
+  border: 1px solid #bbb;
+}
+
+#comment_form input[type="submit"]:active {
+  background: -webkit-linear-gradient(top, #ddd, #aaa);
+  background: -moz-linear-gradient(top, #ddd, #aaa);
+  background: -ms-linear-gradient(top, #ddd, #aaa);
+  background: -o-linear-gradient(top, #ddd, #aaa);
+  background: linear-gradient(top, #ddd, #aaa); 
+  border: 1px solid #999;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.box_quote { 
+     width:600px;
+  padding-top:5px;
+  border-style:solid;
+  border-color:#336699;
+  border-width:1px;
+  padding-left:3px;
+  padding-bottom:10px;
+  word-wrap: break-word;
+  overflow-x: scroll;
+  font-family: "Times New Roman", Times, serif;
+     // border: 1px solid green ;
+    // float: center;
+    // width: 150px;
+    // height: 75px;
+    // margin: 10px;
+    // border: 3px solid #73AD21;
+  }
+
+
+
+#comment_board { 
+    color: blue;
+    font-family: "Times New Roman", Times, serif;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    background-color: #b0e0e6;
+
+ }
+  
+#lesson_plan { 
+    height:100%; 
+    padding:0;
+    margin:0; 
+    width:50%;
+    display:flex; 
+    flex-direction:column;
+ }
  
 
  .dropdown {
     position: relative;
     display: inline-block;
+    
 }
 
 .dropdown-content {
+    font-family: "Times New Roman", Times, serif;
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -28,4 +171,5 @@
 
 .dropdown:hover .dropdown-content {
     display: block;
-}
+    width: auto;
+}   

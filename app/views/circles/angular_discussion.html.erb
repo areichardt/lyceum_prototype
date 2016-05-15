@@ -1,0 +1,21 @@
+
+
+
+<div align="center">
+
+<div ng-app="app">
+  <div ng-controller="discussionCtrl" ng-init="setup()">
+
+  <h1> ({{ comments }})</h1>
+    <input ng-model="circleFilter" list="circles">
+
+    <datalist id="circles">
+      <option ng-repeat="comment in comments">{{ comment.circle }}</option>
+    </datalist>
+
+
+
+
+  </div>
+</div>
+</div>

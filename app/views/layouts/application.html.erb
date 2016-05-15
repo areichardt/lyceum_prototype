@@ -5,6 +5,9 @@
   <title>LyceumPrototype</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%# javascript_include_tag "/assets/js/epub.min.js" %>
+  <%# javascript_include_tag "/assets/js/zip.min.js" %>
+  
   <%= csrf_meta_tags %>
 
  <meta charset="UTF-8">
@@ -62,10 +65,11 @@
           <span class="icon-bar"></span>
         </button>
     
-        <!-- YOU LOGO HERE -->
+       
         <a class="navbar-brand" href="/">
-          <!-- IMAGE OR SIMPLE TEXT -->
-          <img class="light-logo" src="/assets/images/logo-light.png" width="95" alt="">
+          
+          <img class="light-logo" src="/assets/images/lyceum-umd-logo.jpg" alt="Lyceum">
+         
         </a>
       </div>
     
@@ -75,26 +79,82 @@
     
         
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> My Classes </a>
+            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> My Classes </a>
             <ul class="dropdown-menu" role="menu">
               <% if UserCircle.find_by(user_id: current_user.id, teacher: true) != nil %>
                 <% UserCircle.where(user_id: current_user.id, teacher: true).each do |x| %>
-                  <li> <a href="/circles/<%=x.circle_id%>"> <font color="red"> <%= Circle.find_by(id: x.circle_id).name %> </font>  </a></li>     
+                  <li class="dropdown">
+                      <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= Circle.find_by(id: x.circle_id).name %> </a> 
+                        <ul class="dropdown-menu" role="menu">
+                          <li class="dropdown">
+                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"
+                              > Class Discussion Circles </a>
+                                <ul class="dropdown-menu" role="menu">
+                                  <%Comment.where(user_id: current_user.id, circle_id: x.circle_id,discussion_question: true).each do |comment| %> 
+                                      <%if comment == nil%> 
+                                        <li> <h3> You haven't posted any discussion questions. </h3> </li> 
+                                      <%else%>
+                                        <li> <h6> <%= comment.body %> </h6> </li>  
+                                      <%end%>
+                                    <%end%>
+                                </ul>
+                          </li>
+                          <li class="dropdown">
+                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Circle Members </a>
+                              <ul class="dropdown-menu" role="menu">
+                                  <%Circle.find_by(id: x.circle_id).users.each do |user|%>
+                                  <li> <%= user.email %> </li>
+                                  <%end%> 
+                              </ul>  
+                          </li>
+                          <li class="dropdown">
+                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> See List Of Materials </a>
+                              <ul class="dropdown-menu" role="menu">
+                                  <% current_user.books do |book|%>
+                                  <li> <h6> <%= link_to "#{EPUB::Parser.parse(book.epub.path.to_s).metadata.title}", "/books/#{book.id}" %> </h6> </li>
+                                   <%end%> 
+                              </ul>  
+                          </li>
+                          <li class="dropdown">
+                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Add Question For Class Discussion </a>
+                              <ul class="dropdown-menu" role="menu">
+                                <li> 
+                                  <%=form_tag '/comments', method: :post  do  %>
+                                    <div id="comment_form">
+                                      <%=text_field_tag :body %> 
+                                      <%=hidden_field_tag :user_id, current_user.id%> 
+                                      <%=hidden_field_tag :circle_id, x.circle_id %>
+                                      <%=hidden_field_tag :discussion_question, true %>
+                                      <%=submit_tag "Submit Response" %>
+                                      <!--  <textarea rows="10" name="body" id="body" placeholder="Add Question">
+                                      </textarea>
+                                      <input type="hidden" name="user_id" id="user_id" value="#{current_user.id}" /> 
+                                      <input type="hidden" name="circle_id" id="circle_id" value="#{x.circle_id}" /> 
+                                       <input type="hidden" name="discussion_question" id="discussion_question" value="#{true}" />
+                                        <input type="submit" name="submit" value="Add Question" /> -->
+                                 
+                                    </div>
+                                  <%end%>
+                                </li>
+                              </ul>  
+                          </li>
+                      </ul>
+                  </li>
                   <%end%>
-                <%else%>
+              <%else%>
                 <li> <h3> You haven't started any classes! </h3> </li>
-                <%end%>
-               <li><a href="/circles/new"> [Start New Class] </a></li>
-             </ul>
-          </li>
-        
+              <%end%>
+                <li><a href="/circles/new"> [Start New Class] </a></li>
+              </ul>
+            </li>
+
 
          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> My Book Circles </a>
+           <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">  My Book Circles </a> 
             <ul class="dropdown-menu" role="menu">
                 <% if UserCircle.find_by(user_id: current_user.id, teacher: false) != nil %>
                   <% UserCircle.where(user_id: current_user.id, teacher: false).each do |x| %>
-                     <li> <a href="/circles/<%=x.circle_id%>"> <font color="blue"> <%= Circle.find_by(id: x.circle_id).name %> </font> </a></li>     
+                     <li class="side_bar_font"> <a href="/circles/<%=x.circle_id%>">  <%= Circle.find_by(id: x.circle_id).name %> </font> </a></li>     
                       <%end%>
                   <%else%> 
                       <li> You haven't joined any Lit Circles yet! </li>
@@ -103,10 +163,10 @@
           </li>
     
           
-           <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search for a Circle</a>
+           <li  class="dropdown">
+              <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Search for a Circle</a>
               <ul class="dropdown-menu" role="menu">
-               <li> <%= form_tag "/search_circles", method: :post do %>
+               <li class="side_bar_font"> <%= form_tag "/search_circles", method: :post do %>
                   <%= label_tag :name %>
                   <%= text_field_tag :name %>
                   <%= submit_tag "Search for a Circle" %>
@@ -114,18 +174,19 @@
                 </li>
               </ul>
             </li>
+            
 
-          <li><a href="about.html">Friends</a></li>
+         
     
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Friends</a>
+            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Friends</a>
             <ul class="dropdown-menu" role="menu">
               
             </ul>
           </li>
     
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Portfolio</a>
+            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Portfolio</a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="portfolio-single.html">Single Work 1</a></li>
               <li><a href="portfolio-single-2.html">Single Work 2</a></li>
@@ -137,7 +198,7 @@
           </li>
     
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Elements</a>
+            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Elements</a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="components-1.html">Buttons</a></li>
               <li><a href="components-2.html">Iconbox</a></li>
@@ -149,11 +210,11 @@
           </li>
     
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings</a>
+            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Settings</a>
             <ul class="dropdown-menu" role="menu">
                <li>
                     <li class="dropdown">
-                      <h2> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Leave A Circle</a> </h2>
+                      <h2> <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Leave A Circle</a> </h2>
                       <ul class="dropdown-menu" role="menu">
                          <% current_user.circles.each do |circle| %>
                            <% if UserCircle.find_by(user_id: current_user.id, circle_id: circle, teacher: true) != nil %>
@@ -168,10 +229,10 @@
                    
                 <li>
                     <li class="dropdown">
-                      <h2> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Update Profile Pic</a> </h2>
+                      <h2> <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Update Profile Pic</a> </h2>
                       <ul class="dropdown-menu" role="menu">
-                        <li> <%= form_tag "/image/new", method: :post, multipart: true do %>
-                        <%= file_field_tag :image %>
+                        <li> <%= form_tag "/pages/#{current_user.id}", method: :post, multipart: true do %>
+                        <%= file_field_tag :src %>
                         <%= submit_tag "Submit" %>
                         <%end%>
                         </li>
@@ -180,10 +241,12 @@
                   </li>
             </ul>
           </li>
-              
+              <li><p></p></li>
+               <li> <font face="cursive"><%= link_to "Sign Out", '/users/sign_out', method: :delete %></font> </li>
+
               <li> <p></p> </li>
               
-             <li> <font face="cursive"><%= link_to "Sign Out", '/users/sign_out', method: :delete %></font> </li>
+            
        
     
         </ul>
@@ -219,7 +282,7 @@
 
 <%= yield %>
 
-<script src="/assets/js/jquery-2.1.4.min.js"></script>
+  <script src="/assets/js/jquery-2.1.4.min.js"></script>
   <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
   <script src="/assets/js/jquery.superslides.min.js"></script>
   <script src="/assets/js/jquery.mb.YTPlayer.min.js"></script>

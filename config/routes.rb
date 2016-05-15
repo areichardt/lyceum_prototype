@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   
   get '/' => 'pages#home'
+  post '/pages/:id' => 'pages#new_pic'
   
   get '/circles/new' => 'circles#new'
   get '/circles/:id' => 'circles#show'
@@ -16,10 +17,15 @@ Rails.application.routes.draw do
   post '/books' => 'books#create'
   delete '/books/:id' => 'books#destroy'
   
+  post '/comments' => 'comments#create' 
+
   namespace :api do 
     get '/circles' => 'circles#index'
     get '/circles/:id' =>'circles#show'
     post '/circles' => 'circles#create'
+    
+    get '/comments' => 'circles#index'
+
   end 
 
 

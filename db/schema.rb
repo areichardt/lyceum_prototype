@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160509224214) do
+ActiveRecord::Schema.define(version: 20160515035203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,8 +36,18 @@ ActiveRecord::Schema.define(version: 20160509224214) do
     t.text     "body"
     t.integer  "user_id"
     t.integer  "circle_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.boolean  "discussion_question"
+  end
+
+  create_table "images", force: :cascade do |t|
+    t.string   "src_file_name"
+    t.string   "src_content_type"
+    t.integer  "src_file_size"
+    t.datetime "src_updated_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   create_table "user_books", force: :cascade do |t|
@@ -54,6 +64,13 @@ ActiveRecord::Schema.define(version: 20160509224214) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean  "teacher"
+  end
+
+  create_table "user_images", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "image_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

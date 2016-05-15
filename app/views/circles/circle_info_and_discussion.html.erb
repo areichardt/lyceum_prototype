@@ -1,0 +1,77 @@
+<div id="circle_info">
+
+ <div align="center">
+ <h1> <b> <i> <%= @circle.name %> </i> </b> </h1>
+
+
+  
+     <div class="dropdown">
+          <span> <h2> Circle Members </h2> <span> 
+        <div class="dropdown-content">
+          <% @circle.users.each do |user| %>
+            <%if UserCircle.find_by(circle_id: @circle.id, user_id: user.id, teacher: true) %>
+              <%nil%> 
+            <%else%>
+              <h5 class="side_bar_font"> <%=user.email %> </h5>
+            <%end%>
+          <%end%> 
+        </div>
+      </div>    
+    </div>
+          
+<p></p>
+
+<div align = "right">
+  <div class="dropdown">
+       <span> <h2> See List of Materials </h2>  <span>  
+    <div class="dropdown-content">
+        <% @circle.users.each do |user| %>
+          <%if UserCircle.find_by(circle_id: @circle.id, user_id: user.id, teacher: true) %>
+            <ol class="side_bar_font">
+              <% user.books.each do |book| %>
+                <li > <p> <i> <%= link_to "#{EPUB::Parser.parse(book.epub.path.to_s).metadata.title}", "/books/#{book.id}" %> </p> </i> </li>
+              <%end%>
+            </ol>
+            <%= link_to "Add Material", "/books/new", class: 'btn btn-default' %>
+          <%else%>
+            <%nil%>
+          <%end%>
+        <%end%>
+        </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<head> 
+<link rel='stylesheet' type='text/scss' href='circles.scss'/>
+        <script type='text/javascript' src='script.js'></script>
+</head>
+
+
+<div align="center">
+   
+  <h1> <%= @circle.name %> Discussion Page </h1> 
+    <%= form_tag "/circles/#{@circle.id}/discussion", method: :get do %>
+      <%= text_field_tag :body %>>
+      <%=hidden_field_tag :user_id, current_user.id%> 
+      <%=hidden_field_tag :circle_id, @circle.id %>
+      <%= submit_tag "Submit Response" %>
+  <%end%>
+    
+    <% @circle.comments.each do |comment| %>
+      <h4 id="comment_board"> <%= comment.user.email %>: </h4>
+      <div class="box_quote">
+      <h2 > <%= comment.body %> </h2> 
+      </div>
+      <br/><button>Click Me!</button>
+      <%end%>
+</div>
+
+
+
+<div class="font" id="lesson_plan" >
+     <h2> Assignment: </h2>
+     <h6> <%= @circle.lesson_plan %> </h6>
+</div>

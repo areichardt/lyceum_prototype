@@ -1,7 +1,8 @@
 class CirclesController < ApplicationController
 
-  def show 
+def show 
    @circle = Circle.find(params[:id])
+   # render 'circle_info_and_discussion.html.erb'
   end
   
   def new 
@@ -49,6 +50,8 @@ class CirclesController < ApplicationController
       Comment.create(body: params[:body], user_id: params[:user_id], circle_id: params[:circle_id])
     end
     @circle = Circle.find(params[:id])
+    # render "angular_discussion.html.erb"
+
   end
 
 

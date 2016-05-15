@@ -8,8 +8,20 @@ class PagesController < ApplicationController
     end
   end
 
-  def user_page
-  end 
+  def new_pic
+    if params[:id] == current_user.id
+      @image = Image.create(src: params[:src])
+      UserImage.create(image_id: @image.id, user_id: current_user.id)
+      if @image.save 
+        flash[:success] = "You added a new image!"
+      else 
+        flash[:warning] = "Error: Picture did not save"
+      end
+    end
+   redirect_to '/'
+  end
+
+ 
 
 
 end
