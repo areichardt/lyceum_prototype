@@ -6,10 +6,11 @@ Rails.application.routes.draw do
   
   get '/circles/new' => 'circles#new'
   get '/circles/:id' => 'circles#show'
+  patch '/circles/:id' => 'circles#update'
   get '/circles/:id/discussion' => 'circles#discussion'
   post '/circles' => 'circles#create'
   post '/search_circles' => 'circles#search_for_circle'
-  patch '/circles/:id' => 'circles#update'
+  
   
   get '/books/index' => 'books#index'
   get '/books/new' => 'books#new'
@@ -17,15 +18,20 @@ Rails.application.routes.draw do
   post '/books' => 'books#create'
   delete '/books/:id' => 'books#destroy'
   
+  post '/discussion_comments' =>'discussion_comments#create'
+  
+  get '/comments/:id' => 'comments#show'
   post '/comments' => 'comments#create' 
+  
 
+ 
   namespace :api do 
     get '/circles' => 'circles#index'
     get '/circles/:id' =>'circles#show'
     post '/circles' => 'circles#create'
     
     get '/comments' => 'circles#index'
-
+    
   end 
 
 

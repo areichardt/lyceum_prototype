@@ -13,12 +13,15 @@
  *= require_tree .
  *= require_self
  */
+h6.discussion { 
+    color: blue;
+ }
 
 .side_bar_font {
   font-family: "Times New Roman", Times, serif;
  }
 
-ody {
+body {
   font-family: 'Lucida Grande', 'Helvetica Neue', sans-serif;
   font-size: 13px;
 }

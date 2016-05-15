@@ -3,11 +3,11 @@
 </div>
 
 <div align="center">
-  <h2> <%=EPUB::Parser.parse(@book.epub.path.to_s).metadata.title %> </h2>
-   <% #EPUB::Parser.parse(@book.epub.path.to_s).each_page_on_spine do |page| %> 
-   <%# page.content_document.nokogiri.inner_text   %>  
+  <!-- <h2> <%#EPUB::Parser.parse(@book.epub.path.to_s).metadata.title %> </h2> -->
+   <%EPUB::Parser.parse(@book.epub.path.to_s).each_page_on_spine do |page| %> 
+   <h6> <%= page.content_document.nokogiri.text  %> </h6> 
    <!-- content_document.nokogiri.text -->
-  <%#end%>
+  <%end%>
 
   
 

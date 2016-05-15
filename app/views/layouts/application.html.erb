@@ -68,7 +68,7 @@
        
         <a class="navbar-brand" href="/">
           
-          <img class="light-logo" src="/assets/images/lyceum-umd-logo.jpg" alt="Lyceum">
+          <img class="light-logo" src="/assets/images/lyceum-logo-black.jpg" alt="Lyceum"> 
          
         </a>
       </div>
@@ -76,47 +76,58 @@
       <div class="collapse navbar-collapse" id="custom-collapse">
     
         <ul class="nav navbar-nav">
-    
-        
-          <li class="dropdown">
-            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> My Classes </a>
-            <ul class="dropdown-menu" role="menu">
-              <% if UserCircle.find_by(user_id: current_user.id, teacher: true) != nil %>
-                <% UserCircle.where(user_id: current_user.id, teacher: true).each do |x| %>
-                  <li class="dropdown">
+          
+            
+            <li class="dropdown">
+                <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> My Master Circles </a>
+               <ul class="dropdown-menu" role="menu">
+                 <li class="side_bar_font">  <i> "Clever people master life; the wise illuminate and create fresh diffculties" - Emil Nolde </i> </li>
+               
+                  <% if UserCircle.find_by(user_id: current_user.id, teacher: true) != nil %>
+                 <% UserCircle.where(user_id: current_user.id, teacher: true).each do |x| %>
+                   <li class="dropdown">
                       <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= Circle.find_by(id: x.circle_id).name %> </a> 
                         <ul class="dropdown-menu" role="menu">
                           <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown"> - Add Pupils to <%=Circle.find_by(id: x.circle_id).name %> </a>
+                              <ul class="dropdown-menu" role="menu">
+                                <%Circle.find_by(id: x.circle_id).user_circles.where(circle_id: x.circle_id, teacher: false, accepted: false).each do |table|%>
+                                    <li> <h6 class="discussion"> <%="#{User.find_by(id: table.user_id).email}" %> </h6> <%= button_to "Accept", "/circles/#{table.id}", method: :patch %> </li>
+                                      <%end%>
+                              </ul> 
+                          </li>  
+                            <li class="dropdown">
                             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"
-                              > Class Discussion Circles </a>
+                              > Circle Discussion Pages </a>
                                 <ul class="dropdown-menu" role="menu">
+                                  <% j = 1 %>
                                   <%Comment.where(user_id: current_user.id, circle_id: x.circle_id,discussion_question: true).each do |comment| %> 
                                       <%if comment == nil%> 
                                         <li> <h3> You haven't posted any discussion questions. </h3> </li> 
                                       <%else%>
-                                        <li> <h6> <%= comment.body %> </h6> </li>  
+                                        <li> <h6 class="discussion"> <%= link_to "#{j}. #{comment.body}", "/comments/#{comment.id}" %> </h6> </li>  <%j += 1 %>
                                       <%end%>
                                     <%end%>
                                 </ul>
                           </li>
                           <li class="dropdown">
-                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Circle Members </a>
+                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Students in Circle </a>
                               <ul class="dropdown-menu" role="menu">
                                   <%Circle.find_by(id: x.circle_id).users.each do |user|%>
-                                  <li> <%= user.email %> </li>
+                                  <li> <%= user.email unless (user.id == current_user.id or UserCircle.find_by(user_id: user.id, accepted: false)) %> </li>
                                   <%end%> 
                               </ul>  
                           </li>
                           <li class="dropdown">
-                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> See List Of Materials </a>
+                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">  My Teaching Materials </a>
                               <ul class="dropdown-menu" role="menu">
-                                  <% current_user.books do |book|%>
+                                <% User.find_by(id: current_user.id).books do |book|%>
                                   <li> <h6> <%= link_to "#{EPUB::Parser.parse(book.epub.path.to_s).metadata.title}", "/books/#{book.id}" %> </h6> </li>
                                    <%end%> 
                               </ul>  
                           </li>
                           <li class="dropdown">
-                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Add Question For Class Discussion </a>
+                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Add Question For Circle Discussion </a>
                               <ul class="dropdown-menu" role="menu">
                                 <li> 
                                   <%=form_tag '/comments', method: :post  do  %>
@@ -125,7 +136,7 @@
                                       <%=hidden_field_tag :user_id, current_user.id%> 
                                       <%=hidden_field_tag :circle_id, x.circle_id %>
                                       <%=hidden_field_tag :discussion_question, true %>
-                                      <%=submit_tag "Submit Response" %>
+                                      <%=submit_tag "Add Discussion Question" %>
                                       <!--  <textarea rows="10" name="body" id="body" placeholder="Add Question">
                                       </textarea>
                                       <input type="hidden" name="user_id" id="user_id" value="#{current_user.id}" /> 
@@ -142,23 +153,54 @@
                   </li>
                   <%end%>
               <%else%>
-                <li> <h3> You haven't started any classes! </h3> </li>
-              <%end%>
-                <li><a href="/circles/new"> [Start New Class] </a></li>
-              </ul>
-            </li>
+                <li> <h3> You haven't started any Circles! </h3> </li>
+               <%end%>
+                <li><a href="/circles/new"> -[Start New Circle] </a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> - [Add Material To Library] </a>
+                    <ul class="dropdown-menu" role="menu">
+                     <li> <%= form_for @book, html: {multipart: true} do |f| %>
+                        <div class="field"> 
+                          <%= f.label "New Material" %> <br> 
+                          <%= f.file_field :epub %>
+                        </div>
+                        <div class="actions">
+                          <%= f.submit "Add Material" %>
+                        </div>
+                          <% end %>  
+                      </li>
+                  </ul>
+              </li>
+             
+   
+   <!--/////////////////////////////////////////////-->
+          </ul>
+        </li>
 
-
+<!-- /////////////////////////////////-->
+         
          <li class="dropdown">
-           <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">  My Book Circles </a> 
+           <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> My Student Circles  </a> 
             <ul class="dropdown-menu" role="menu">
+                <li class="side_bar_font">  <i> "You are always a student, never a master.  You have to keep moving forward" - Conrad Hall </i> </li> 
                 <% if UserCircle.find_by(user_id: current_user.id, teacher: false) != nil %>
                   <% UserCircle.where(user_id: current_user.id, teacher: false).each do |x| %>
-                     <li class="side_bar_font"> <a href="/circles/<%=x.circle_id%>">  <%= Circle.find_by(id: x.circle_id).name %> </font> </a></li>     
-                      <%end%>
-                  <%else%> 
-                      <li> You haven't joined any Lit Circles yet! </li>
-                  <%end%>
+                  <li class="dropdown">
+                    <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= Circle.find_by(id: x.circle_id).name %> </font> </a> 
+                      <ul class="dropdown-menu" role="menu">
+                        <li class="dropdown">
+                          <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> View Teacher's Materials </font> </a> 
+                            <ul class="dropdown-menu" role="menu">
+                              <%User.find_by(id: UserCircle.find_by(circle_id: x.circle_id, teacher: true).user_id).books.each do |book| %> 
+                                <li> <%= link_to "#{EPUB::Parser.parse(book.epub.path.to_s).metadata.title}", "/books/#{book.id}" %> </li>
+                              <%end%>
+                            </ul>
+                        </li>
+                      </ul>
+                    <%end%>
+                <%else%> 
+                  <li> You haven't joined any Circles yet! </li>
+                <%end%>
             </ul>
           </li>
     

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160515035203) do
+ActiveRecord::Schema.define(version: 20160515184934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,14 @@ ActiveRecord::Schema.define(version: 20160515035203) do
     t.boolean  "discussion_question"
   end
 
+  create_table "discussion_comments", force: :cascade do |t|
+    t.integer  "comment_id"
+    t.integer  "user_id"
+    t.text     "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "images", force: :cascade do |t|
     t.string   "src_file_name"
     t.string   "src_content_type"
@@ -64,6 +72,7 @@ ActiveRecord::Schema.define(version: 20160515035203) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean  "teacher"
+    t.boolean  "accepted"
   end
 
   create_table "user_images", force: :cascade do |t|
