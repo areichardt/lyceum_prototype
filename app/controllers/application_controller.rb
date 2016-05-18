@@ -4,7 +4,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   layout :layout
-  before_filter :get_comment, :new_book
+  before_filter :get_comment  #:new_book
+  before_filter :get_question
   
   private
 
@@ -21,9 +22,14 @@ class ApplicationController < ActionController::Base
     @comment = Comment.new
   end
   
-  def new_book
-    @book = Book.new
+  def get_question
+    @question = QuestionAnswer.new
   end
+ 
+
+  # def new_book
+  #   @book = Book.new
+  # end
 
 
 end

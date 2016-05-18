@@ -1,35 +1,18 @@
-<!-- <div align="center">
+
+
+
+<div align="center"
 
 <div ng-app="app">
-  <div ng-controller="discussionCtrl" ng-init="setup()">
-
-  <h1> ({{ comments }})</h1>
-    <input ng-model="circleFilter" list="circles">
-
-    <datalist id="circles">
-      <option ng-repeat="comment in comments">{{ comment.circle }}</option>
-    </datalist>
-  
+  <div ng-controller="discussionCtrl" ng-init="setup(<%= @comment.id %>, '<%= current_user.email %>')">
+    <h1> <%= @comment.body%></h1>
+    <input placeholder="new message" ng-model="newMessageText">
+    <button ng-click="createMessage(newMessageText)">Submit</button>
+    <div ng-repeat="message in messages">
+      <p>{{ message.name }}: {{ message.text }}</p>
+    </div>
   </div>
 </div>
-</div>
- -->
-
-
-<div align="center"> 
-  <h1 class="side_bar_font"> <%= @comment.body %> </h1>
-   <%= form_tag "/discussion_comments", method: :post do %>
-   <%=text_field_tag :body %> 
-   <%=hidden_field_tag :user_id, current_user.id %>
-   <%=hidden_field_tag :comment_id, @comment.id %>
-   <%=submit_tag "Submit Response" %>
-   <%end%>
-<p></p>
-
-<% DiscussionComment.where(comment_id: @comment.id).each do |comment|%>
-<h6> <%= User.find_by(id: @comment.user_id).email%>: </h6> 
-<h6> <%= comment.body %> </h6>
-<%end%>
 
 </div>
 

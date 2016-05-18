@@ -42,6 +42,7 @@
   
   <!-- Template core CSS -->
   <link href="/assets/css/template.css" rel="stylesheet">
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 
  </head>
 
@@ -88,8 +89,8 @@
                    <li class="dropdown">
                       <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= Circle.find_by(id: x.circle_id).name %> </a> 
                         <ul class="dropdown-menu" role="menu">
-                          <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown"> - Add Pupils to <%=Circle.find_by(id: x.circle_id).name %> </a>
+                          <li class="dropdown side_bar_font">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown"> - Add Pupils to "<%=Circle.find_by(id: x.circle_id).name %>" </a>
                               <ul class="dropdown-menu" role="menu">
                                 <%Circle.find_by(id: x.circle_id).user_circles.where(circle_id: x.circle_id, teacher: false, accepted: false).each do |table|%>
                                     <li> <h6 class="discussion"> <%="#{User.find_by(id: table.user_id).email}" %> </h6> <%= button_to "Accept", "/circles/#{table.id}", method: :patch %> </li>
@@ -98,14 +99,14 @@
                           </li>  
                             <li class="dropdown">
                             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"
-                              > Circle Discussion Pages </a>
+                              > Master Circle Discussion Pages </a>
                                 <ul class="dropdown-menu" role="menu">
                                   <% j = 1 %>
                                   <%Comment.where(user_id: current_user.id, circle_id: x.circle_id,discussion_question: true).each do |comment| %> 
                                       <%if comment == nil%> 
-                                        <li> <h3> You haven't posted any discussion questions. </h3> </li> 
+                                        <li> <h3 > You haven't posted any discussion questions. </h3> </li> 
                                       <%else%>
-                                        <li> <h6 class="discussion"> <%= link_to "#{j}. #{comment.body}", "/comments/#{comment.id}" %> </h6> </li>  <%j += 1 %>
+                                        <li> <h6 class="discussion col-sm-12"> <%= link_to "#{j}. #{comment.body}", "/comments/#{comment.id}" %> </h6> </li>  <% j += 1 %>
                                       <%end%>
                                     <%end%>
                                 </ul>
@@ -114,36 +115,28 @@
                             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Students in Circle </a>
                               <ul class="dropdown-menu" role="menu">
                                   <%Circle.find_by(id: x.circle_id).users.each do |user|%>
-                                  <li> <%= user.email unless (user.id == current_user.id or UserCircle.find_by(user_id: user.id, accepted: false)) %> </li>
+                                    <% if (user.id == current_user.id or UserCircle.find_by(user_id: user.id, accepted: false)) %>
+                                        <%nil%>
+                                    <%else%> 
+                                       <li> <h6 class="discussion"> <%= link_to "#{user.email}", "/private_discussion/#{user.id}" %> </h6> </li>
+                                      <%end%>
                                   <%end%> 
                               </ul>  
                           </li>
+                         
                           <li class="dropdown">
-                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">  My Teaching Materials </a>
-                              <ul class="dropdown-menu" role="menu">
-                                <% User.find_by(id: current_user.id).books do |book|%>
-                                  <li> <h6> <%= link_to "#{EPUB::Parser.parse(book.epub.path.to_s).metadata.title}", "/books/#{book.id}" %> </h6> </li>
-                                   <%end%> 
-                              </ul>  
-                          </li>
-                          <li class="dropdown">
-                            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Add Question For Circle Discussion </a>
+                             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Add Question For Circle Discussion </a> 
                               <ul class="dropdown-menu" role="menu">
                                 <li> 
                                   <%=form_tag '/comments', method: :post  do  %>
                                     <div id="comment_form">
-                                      <%=text_field_tag :body %> 
+                                      <textarea rows="3" name="body" id="body" placeholder="Add Question"></textarea>
                                       <%=hidden_field_tag :user_id, current_user.id%> 
                                       <%=hidden_field_tag :circle_id, x.circle_id %>
                                       <%=hidden_field_tag :discussion_question, true %>
                                       <%=submit_tag "Add Discussion Question" %>
-                                      <!--  <textarea rows="10" name="body" id="body" placeholder="Add Question">
-                                      </textarea>
-                                      <input type="hidden" name="user_id" id="user_id" value="#{current_user.id}" /> 
-                                      <input type="hidden" name="circle_id" id="circle_id" value="#{x.circle_id}" /> 
-                                       <input type="hidden" name="discussion_question" id="discussion_question" value="#{true}" />
-                                        <input type="submit" name="submit" value="Add Question" /> -->
-                                 
+
+                                
                                     </div>
                                   <%end%>
                                 </li>
@@ -156,24 +149,9 @@
                 <li> <h3> You haven't started any Circles! </h3> </li>
                <%end%>
                 <li><a href="/circles/new"> -[Start New Circle] </a></li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> - [Add Material To Library] </a>
-                    <ul class="dropdown-menu" role="menu">
-                     <li> <%= form_for @book, html: {multipart: true} do |f| %>
-                        <div class="field"> 
-                          <%= f.label "New Material" %> <br> 
-                          <%= f.file_field :epub %>
-                        </div>
-                        <div class="actions">
-                          <%= f.submit "Add Material" %>
-                        </div>
-                          <% end %>  
-                      </li>
-                  </ul>
-              </li>
-             
-   
-   <!--/////////////////////////////////////////////-->
+                 
+                    
+<!--/////////////////////////////////////////////-->
           </ul>
         </li>
 
@@ -196,7 +174,37 @@
                               <%end%>
                             </ul>
                         </li>
-                      </ul>
+                        <li class="dropdown">
+                          <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Discussion Circles </font> </a>
+                          <ul class="dropdown-menu" role="menu">
+                           <% j = 1 %>
+                              <%Comment.where(user_id: User.find_by(id: UserCircle.find_by(circle_id: x.circle_id, teacher: true).user_id), circle_id: x.circle_id,discussion_question: true).each do |comment| %> 
+                                  <%if comment == nil%> 
+                                    <li> <h6> Today this circle's master stands silent. For the journey down the path to enlightenment is a long one. Today you may rest.</h6> </li> 
+                                      <%else%>
+                                        <li> <h6 class="discussion"> <%= link_to "#{j}. #{comment.body}", "/comments/#{comment.id}" %> </h6> </li>  
+                                          <%j += 1 %>
+                                    <%end%>
+                                  <%end%>
+                            </ul>
+                        
+                        <li class="dropdown">
+                          <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Ask a Question</font> </a>
+                          <ul class="dropdown-menu" role="menu">
+                            <li> 
+                               <%=form_tag '/questions', method: :post  do  %>
+                                 <div id="comment_form">
+                                    <textarea rows="3" name="body" id="body" placeholder="Add Question"></textarea>
+                                    <%=hidden_field_tag :user_id, current_user.id%> 
+                                    <%=hidden_field_tag :circle_id, x.circle_id %>
+                                    <%=hidden_field_tag :teacher, false %>
+                                    <%=submit_tag "Ask Question" %>
+                                  </div>
+                                  <%end%>
+                            </li>
+                          </ul>
+                     
+                     </ul>
                     <%end%>
                 <%else%> 
                   <li> You haven't joined any Circles yet! </li>
@@ -219,7 +227,7 @@
             
 
          
-    
+    <!-- 
           <li class="dropdown">
             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Friends</a>
             <ul class="dropdown-menu" role="menu">
@@ -230,6 +238,7 @@
           <li class="dropdown">
             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Portfolio</a>
             <ul class="dropdown-menu" role="menu">
+              
               <li><a href="portfolio-single.html">Single Work 1</a></li>
               <li><a href="portfolio-single-2.html">Single Work 2</a></li>
               <li><a href="portfolio-single-3.html">Single Work 3</a></li>
@@ -237,20 +246,11 @@
               <li><a href="portfolio-single-5.html">Single Work 5 & Vimeo</a></li>
               <li><a href="portfolio-single-6.html">Single Work 6 & Gallery</a></li>
             </ul>
-          </li>
-    
-          <li class="dropdown">
-            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Elements</a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="components-1.html">Buttons</a></li>
-              <li><a href="components-2.html">Iconbox</a></li>
-              <li><a href="components-3.html">Progress bars</a></li>
-              <li><a href="components-4.html">Tab & Accordian</a></li>
-              <li><a href="components-5.html">Columns</a></li>
-              <li><a href="components-6.html">Modules & Overlays</a></li>
-            </ul>
-          </li>
-    
+          </li> -->
+      
+           <li> <a class="side_bar_font" href="/pages/<%=current_user.id%>"> Teaching Resources </a> </li>
+            
+            
           <li class="dropdown">
             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Settings</a>
             <ul class="dropdown-menu" role="menu">
@@ -282,6 +282,10 @@
                     </li>
                   </li>
             </ul>
+          
+
+
+
           </li>
               <li><p></p></li>
                <li> <font face="cursive"><%= link_to "Sign Out", '/users/sign_out', method: :delete %></font> </li>
@@ -347,3 +351,4 @@
 
 </body>
 </html>
+

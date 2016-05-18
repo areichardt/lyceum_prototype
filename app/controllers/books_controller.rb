@@ -4,7 +4,13 @@ class BooksController < ApplicationController
     @books = Book.all 
     # render 'epub_show.html.erb', :layout => false
   end 
-
+  
+  def show
+    @book = Book.find(params[:id])
+    render 'epub_show.html.erb', layout: false
+  end 
+  
+  
   def new 
     @book = Book.new
   end 
@@ -20,10 +26,6 @@ class BooksController < ApplicationController
     redirect_to '/'
   end 
 
-  def show
-    @book = Book.find(params[:id])
-   
-  end 
 
   def destroy 
     @book = Book.find(params[:id])

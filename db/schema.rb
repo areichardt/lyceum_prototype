@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160515184934) do
+ActiveRecord::Schema.define(version: 20160518021002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "answers", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "question_answer_id"
+    t.text     "body"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
 
   create_table "books", force: :cascade do |t|
     t.string   "epub_file_name"
@@ -58,6 +66,21 @@ ActiveRecord::Schema.define(version: 20160515184934) do
     t.datetime "updated_at",       null: false
   end
 
+  create_table "question_answers", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "circle_id"
+    t.boolean  "teacher"
+    t.text     "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tubes", force: :cascade do |t|
+    t.string   "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "user_books", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "book_id"
@@ -78,6 +101,13 @@ ActiveRecord::Schema.define(version: 20160515184934) do
   create_table "user_images", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "image_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_videos", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "tube_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

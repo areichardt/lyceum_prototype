@@ -21,7 +21,9 @@ class PagesController < ApplicationController
    redirect_to '/'
   end
 
- 
+  def user_resources
+    @user = User.find_by(id: params[:id])
+  end
 
 
 end

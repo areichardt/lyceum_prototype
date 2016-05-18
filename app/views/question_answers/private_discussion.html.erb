@@ -1,0 +1,19 @@
+<div align="center"> 
+  <%if @question == nil%> 
+    <h1> No current questions from "<%= User.find_by(id: params[:id]).email %>"" </h1> 
+  <%else%> 
+    <%= @question %>
+      <% if User.find_by(id: current_user.id).id == UserCircle.find_by(circle_id: @question.circle_id, teacher:true).user_id%>
+        <%=form_tag '/answers', method: :post  do  %>
+          <div id="comment_form">
+            <textarea rows="3" name="body" id="body" placeholder="Add Question"></textarea>
+            <%=hidden_field_tag :user_id, current_user.id%> 
+            <%=hidden_field_tag :question_answer_id, @question.id %>
+            <%=submit_tag "Respond To Student Question" %>
+          </div>
+        <%end%>
+      <%else%> 
+        <%nil%>
+    <%end%> 
+<%end%>
+</div>

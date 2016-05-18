@@ -3,7 +3,7 @@
 <div>
 
 <div align="center">
-  <% @books.each do |book| %> 
+  <% current_user.books.each do |book| %> 
     <p> <h3> <i> <%= link_to "#{EPUB::Parser.parse(book.epub.path.to_s).metadata.title}", "/books/#{book.id}" %> <%= link_to "Delete Book", "/books/#{book.id}", method: :delete, class: 'btn btn-default' %> </i> </h3> </p>
 <%end%>
 </div>

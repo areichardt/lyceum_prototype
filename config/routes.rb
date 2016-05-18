@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   
   get '/' => 'pages#home'
+  get '/pages/:id' => 'pages#user_resources'
   post '/pages/:id' => 'pages#new_pic'
   
   get '/circles/new' => 'circles#new'
@@ -23,8 +24,11 @@ Rails.application.routes.draw do
   get '/comments/:id' => 'comments#show'
   post '/comments' => 'comments#create' 
   
-
- 
+  get '/private_discussion/:id' => 'question_answers#private_discussion'
+  post '/questions' => 'question_answers#create'
+  
+  post '/answers' => 'answers#create'
+  
   namespace :api do 
     get '/circles' => 'circles#index'
     get '/circles/:id' =>'circles#show'

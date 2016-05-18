@@ -1,12 +1,30 @@
 (function() {
-  angular.module("app").controller("discussionCtrl", function($scope, $http) {
-    
-    $scope.setup = function() {
-      $http.get('/api/comments.json').then(function(response) {
-        $scope.comments= response.data;
+  angular.module("app").controller("discussionCtrl", function($scope, $http, $timeout) {
+    var myDataRef = new Firebase('https://crackling-inferno-8576.firebaseio.com/');
+
+    $scope.setup = function(comment_id, email) {
+      $scope.comment_id = comment_id;
+      $scope.email = email;
+      // $http.get('/api/comments.json').then(function(response) {
+      //   $scope.comments= response.data;
+      // });
+      $scope.messages = [];
+      myDataRef.on('child_added', function(snapshot) {
+        $timeout(function() {
+          var message = snapshot.val();
+          if (message.comment_id === $scope.comment_id) {
+            $scope.messages.push(message);
+          } else {
+            console.log(message, $scope.comment_id);
+          }
+        });
       });
     };
 
+    $scope.createMessage = function(inputText) {
+      myDataRef.push({name: $scope.email, text: inputText, comment_id: $scope.comment_id});
+      $scope.newMessageText = '';
+    };
   
 
     // $scope.toggleBio = function(inputComment) {

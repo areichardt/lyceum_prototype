@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   has_many :user_images
   has_many :images, through: :user_images
   has_many :discussion_comments
+  has_many :question_answers
+  has_many :answers
 
 has_attached_file :image, :path => ":rails_root/public/system/images/:attachment/:id/:basename_:style.:extension", :url => "/system/:attachment/:id/:basename_:style.:extension",
  :styles => {
