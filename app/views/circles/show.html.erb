@@ -1,65 +1,28 @@
 
-<div align="right"> 
-  <h3> <%= link_to "Enter Discussion", "/circles/#{@circle.id}/discussion", class: "btn btn-default" %> </h3>
+
+<div align="center" id="lesson_plan"> 
+  <hr size="20">
+  <h1 id="circle_font"> <i> <%="#{@circle.name}" %> Active Discussion Circles </i> </h1> 
+  <hr size="20">
+  <ol id="circle_font">
+   <%Comment.where(circle_id: @circle.id, discussion_question: true).each do |x|%>
+    <div  >
+      <li> <p> <h2 id="circle_font"> <%= link_to "#{x.body}", "/comments/#{x.id}" %> </h2> </p> </li>
+    </div>
+    <p></p>
+    <%end%> 
+  </ol>
 </div>
 
-<p></p>
 
-
-<!-- <div  class="embed-container">  
- -->  <!-- < embed("https://www.youtube.com/watch?v=7bB_fVDlvhc") %> -->
-<!-- </div>  --> 
-
+<!-- <div align="center">
+<div class="font" id="lesson_plan">
+  <h2> Assignment: </h2>
+  <h6> <% @circle.lesson_plan %> </h6>
+</div>
+</div>
  
-
-
-<div align = "center">
-  <div class="dropdown">
-       <span> <h2> See List of Materials </h2>  <span>  
-    <div class="dropdown-content">
-        <% @circle.users.each do |user| %>
-          <%if UserCircle.find_by(circle_id: @circle.id, user_id: user.id, teacher: true) %>
-            <ol class="side_bar_font">
-              <% user.books.each do |book| %>
-                <li > <p><%= link_to "#{EPUB::Parser.parse(book.epub.path.to_s).metadata.title}", "/books/#{book.id}" %></p> </li>
-              <%end%>
-            </ol>
-            <%= link_to "Add Material", "/books/new", class: 'btn btn-default' %>
-          <%else%>
-            <%nil%>
-          <%end%>
-        <%end%>
-        </div>
-    </div>
-  </div>
-
-
-<div align="center">
-  <h1> <b> <i> <%= @circle.name %> </i> </b> </h1>
-  <% @circle.users.each do |user| %> 
-      <% if user.user_circles.find_by(circle_id: @circle.id, user_id: user.id, teacher: true) != nil %>
-          <%nil%>
-      <%else%>    
-         <div align="right">
-          <div class="dropdown">
-             <span> <h2> <%=user.email %> </h2>  <span>  
-            <div class="dropdown-content">
-              <% user.books.each do |book| %> 
-                <%= link_to "#{EPUB::Parser.parse(book.epub.path.to_s).metadata.title}", "/books/#{book.id}" %>
-              <%end%>
-         
-            </div>
-          </div>
-        </div>
-      <%end%>
-  <%end%>
-
-  
-  <div class="font" id="lesson_plan">
-     <h2> Assignment: </h2>
-     <h6> <%= @circle.lesson_plan %> </h6>
- 
-
+ -->
 
 
 

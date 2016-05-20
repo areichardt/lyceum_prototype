@@ -1,10 +1,10 @@
 class CirclesController < ApplicationController
 
+ 
   def show 
    @circle = Circle.find(params[:id])
-   # render 'circle_info_and_discussion.html.erb'
-  end
-  
+  end 
+
   def new 
   end 
 
@@ -25,37 +25,32 @@ class CirclesController < ApplicationController
 
     if params[:user_id]
       UserCircle.create(circle_id: params[:circle_id], user_id: params[:user_id], teacher: params[:teacher], accepted: params[:accepted])
-      flash[:success] = "You have requested to join the circle -- \"#{Circle.find_by(id: params[:circle_id]).name}\" --and become #{User.find_by(id: UserCircle.find_by(circle_id: params[:circle_id], teacher: true).user_id).email}'s Pupil."
+      flash[:success] = "You have requested to become #{User.find_by(id: UserCircle.find_by(circle_id: params[:circle_id], teacher: true).user_id).email}'s pupil in \"#{Circle.find_by(id: params[:circle_id]).name}\"" 
       redirect_to '/'
     end
   end
    
-  def update
-    if UserCircle.find_by(id: params[:id])
-      a = UserCircle.find_by(id: params[:id])
-      a.update(accepted: true) 
-      flash[:success] = "You accepted a new member to your circle: #{Circle.find_by(id: UserCircle.find_by(id: params[:id]).circle_id).name} "
-    
-    else 
-     params[:id]
-      join_table = UserCircle.find_by(circle_id: params[:id], user_id: current_user.id)
-      join_table.destroy
-      flash[:success] = "You Left A Circle"
+  def edit
+    @circle = Circle.find_by(id: params[:id])
+    render 'edit_lesson_plan.html.erb'
+  end
 
-    end
-      redirect_to '/'
+
+  def update
+    @circle = Circle.find_by(id: params[:id])
+    @circle.update(lesson_plan: params[:lesson_plan], name: params[:name]).save
+    flash[:success] = "Updated Lesson Plan For #{@circle.name}"
+    redirect_to '/'
   end
   
-  def search_for_circle
-    @circles = Circle.where("name LIKE ?", "%" + params[:name] + "%")
+
+   def search_for_circle
+    if params[:name] == ("all" || "All")
+      @circles = Circle.all
+    else
+      @circles = Circle.where("name LIKE ?", "%" + params[:name] + "%")
+    end
   end 
   
-  def discussion 
-    if params[:body]
-      Comment.create(body: params[:body], user_id: params[:user_id], circle_id: params[:circle_id])
-    end
-    @circle = Circle.find(params[:id])
-    # render "angular_discussion.html.erb"
-  end
-
+ 
 end

@@ -1,0 +1,21 @@
+ 
+<div align="center"> 
+  <h1> Admin Add Image Page </h1>
+  <%= form_for @image, html: {multipart: true} do |f| %>
+    <div class="field"> 
+      <%= f.label :src %> <br> 
+      <%= f.file_field :src %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Add Image To Reel" %>
+    </div>
+  <% end %>
+
+
+
+<% @all_images.each do |image| %>
+ <%= image_tag image.src.url(:original)  %> <br> 
+<%end%> 
+
+</div>

@@ -1,0 +1,8 @@
+<div align="center">
+  <%=form_tag "/circles/#{@circle.id}", method: :patch  do  %>
+    <div id="comment_form">
+      <textarea rows="20"  name="lesson_plan" id="lesson_plan" placeholder= "<%=@circle.lesson_plan%>" ></textarea>
+        <%= hidden_field_tag :name, @circle.name%>
+       <h6 id="circle_font"> <%=submit_tag "Change Lesson Plan for #{@circle.name}" %> </h6>
+  <%end%>
+</div>

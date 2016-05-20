@@ -1,3 +1,46 @@
 // Place all the styles related to the Comments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+#discussion_question { 
+  margin-left: 280px;
+  margin-right: 10px;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+#discussion_comments { 
+  // margin-left: 250px; 
+  // margin-right: 10px;
+}
+
+#discussion_name{ 
+ // margin-right: 600px;
+ text-align: right !important;
+}
+
+
+.discussion_background { 
+
+  background: image-url('data-background') center fixed;
+   margin: auto;
+   height: 100vh;
+
+}
+
+#hero { 
+  padding-top: 0;
+ 
+}
+
+#comment_form { 
+ margin-top: 20px;
+}
+
+.comment-content {
+  margin: 0 !important;
+  // padding: 0 !important;
+}

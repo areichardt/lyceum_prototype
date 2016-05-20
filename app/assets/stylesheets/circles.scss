@@ -2,6 +2,20 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+
+
+h1, h2, h3, h4, h5, h6, p, a, ol {
+  color: #ccc !important;
+  text-align: left !important;
+}
+
+
+
+#circle_font { 
+font-family: "Times New Roman", Times, serif;
+}
+
+
 .embed-container {
   position: relative;
   padding-bottom: 56.25%;
@@ -23,12 +37,30 @@
   
 }
 
+ol { 
+  font-size: 16px;
+  color: black;
+}
+
+hr { 
+ width: 100% !important;
+}
 
 body {
   font-family: 'Lucida Grande', 'Helvetica Neue', sans-serif;
-  font-size: 13px;
+  background: url('/assets/images/lyceum_two.jpg') no-repeat center center fixed  !important;
+  // background: linear-gradient( rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9) ), url('/assets/images/lyceum_two.jpg') no-repeat center center fixed  !important;
+  -webkit-background-size: cover;
+ -moz-background-size: cover;
+ -o-background-size: cover;
+  background-size: cover !important;
+  color: white;
+  height: 100%
 }
 
+html { 
+ height: 100%;
+}
 #comment_form input, #comment_form textarea {
   border: 4px solid rgba(0,0,0,0.1);
   padding: 8px 10px;
@@ -115,12 +147,18 @@ body {
 #lesson_plan { 
     height:100%; 
     padding:0;
-    margin:0; 
+    margin-left:350px; 
     width:50%;
     display:flex; 
     flex-direction:column;
+    
+ 
  }
  
+ .overlay { 
+  background-color: rgba(0, 0, 0, 0.8);
+  height: 100%;
+}
 
  .dropdown {
     position: relative;

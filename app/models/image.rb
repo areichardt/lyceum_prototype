@@ -2,7 +2,8 @@ class Image < ActiveRecord::Base
  has_many :user_images
  has_many :users, through: :user_images 
 
-has_attached_file :image, :path => ":rails_root/public/system/images/:attachment/:id/:basename_:style.:extension", :url => "/system/:attachment/:id/:basename_:style.:extension",
+
+has_attached_file :src, :path => ":rails_root/public/system/images/:attachment/:id/:basename_:style.:extension", :url => "/system/:attachment/:id/:basename_:style.:extension",
  :styles => {
   :thumb    => ['100x100#',  :jpg, :quality => 70],
   :preview  => ['480x480#',  :jpg, :quality => 70],
@@ -16,7 +17,7 @@ has_attached_file :image, :path => ":rails_root/public/system/images/:attachment
   :retina   => '-set colorspace sRGB -strip -sharpen 0x0.5'
 }
 
-validates_attachment :image, size: { in: 0..10.megabytes },
+validates_attachment :src, size: { in: 0..10.megabytes },
                      content_type: { content_type: /^image\/(jpeg|png|gif|tiff)$/ }
 
 

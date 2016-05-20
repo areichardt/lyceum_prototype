@@ -1,12 +1,12 @@
 <p></p>
 
 
-<div align="center"> 
+<div align="center" id="lesson_plan"> 
 <% @circles.each do |circle| %>
   <%if @circles.find_by(id: current_user.circles.find_by(id: circle.id)) != nil%> 
     <% nil %> 
   <%else%> 
-    <h2> <%= link_to "#{circle.name}", "/circles/#{circle.id}" %> </h2>
+   <p> <h2> <%= link_to "#{circle.name}", "/circles/#{circle.id}" %> </h2> </p>
           <%= form_tag '/circles', method: :post do %> 
           <%= hidden_field_tag :user_id, current_user.id %>
           <%= hidden_field_tag :circle_id, circle.id %>

@@ -1,18 +1,73 @@
 
 
 
-<div align="center"
+<div ng-app="app" >
+   <div ng-controller="discussionCtrl" ng-init="setup(<%= @comment.id %>, '<%= current_user.email %>')" >
 
-<div ng-app="app">
-  <div ng-controller="discussionCtrl" ng-init="setup(<%= @comment.id %>, '<%= current_user.email %>')">
-    <h1> <%= @comment.body%></h1>
-    <input placeholder="new message" ng-model="newMessageText">
-    <button ng-click="createMessage(newMessageText)">Submit</button>
-    <div ng-repeat="message in messages">
-      <p>{{ message.name }}: {{ message.text }}</p>
+<% if UserCircle.find_by(user_id: current_user.id, circle_id: @comment.circle_id, teacher: true) %>
+  <div align = "right">
+     <%=form_tag "/comments/#{@comment.id}", method: :patch  do  %>
+      <div id="comment_form">
+        <textarea class="form-control" rows="3" name="body" id="body" > </textarea>
+        <%=hidden_field_tag :user_id, @comment.user_id%> 
+        <%=hidden_field_tag :circle_id, @comment.circle_id %>
+        <%=hidden_field_tag :discussion_question, @comment.discussion_question %>
+        <%=submit_tag "Edit Question" %>
+      </div>
+    <%end%>
+    <%= link_to "Delete Discussion", "/comments/#{@comment.id}", method: :delete, class: 'btn btn-default' %>
+<%else%>
+  <%nil%>
+<%end%>
+</div>
+<p></p>
+ <div align="center">
+  <section id="hero" class="module" >
+    <h1  id="discussion_question"> <%= @comment.body%> </h1>
+    <hr class="divider divider m-b-40">
+    <div class="container-fluid container-custom" >
+     <div class="row" >
+       <div class="col-sm-8 col-sm-offset-2">
+         <div class="comments">
+           <h4 class="comment-title font-alt"></h4>
+              <div ng-repeat="message in messages">
+                <div class="comment clearfix">
+                 <div class="comment-content clearfix">
+                    
+                  <div class="comment-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h5 id="discussion_name"> {{ message.name }} </h5>
+                      </div>
+                      <div class="col-md-6">
+                        <h6 id="discussion_comments"> {{ message.text }} </h6>
+                      </div>
+                    </div>
+                    <!-- <button ng-click="deleteMessage()"> Delete</button> -->
+                  </div>
+                    <div class="comment-meta font-alt"> </div>
+                  </div>
+                </div>
+           </div>
+             <!-- <input placeholder="new message" ng-model="newMessageText"> -->
+                <form class="form-horizontal comments-form">
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <textarea  ng-model="newMessageText" class="form-control" placeholder="Leave a comment here..." rows="8"></textarea>
+                  </div>
+                </div>
+             <button ng-click="createMessage(newMessageText)">Submit</button>
+               </form>
+           </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+</section>
 
 </div>
+</div>
+</div>
+</div>
+
+
 

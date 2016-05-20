@@ -19,6 +19,9 @@
           }
         });
       });
+    
+
+
     };
 
     $scope.createMessage = function(inputText) {
@@ -26,7 +29,9 @@
       $scope.newMessageText = '';
     };
   
-
+    $scope.deleteMessage = function(inputIndex) {
+     myDataRef.splice(inputIndex, 1);
+    };
     // $scope.toggleBio = function(inputComment) {
     //   inputPerson.bioVisible = !inputComment.bioVisible;
     // };

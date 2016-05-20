@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<body>
 <head>
   <title>LyceumPrototype</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
@@ -46,6 +45,8 @@
 
  </head>
 
+<body>
+ <div class="overlay">
 
 
   <!-- PRELOADER -->
@@ -82,7 +83,7 @@
             <li class="dropdown">
                 <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> My Master Circles </a>
                <ul class="dropdown-menu" role="menu">
-                 <li class="side_bar_font">  <i> "Clever people master life; the wise illuminate and create fresh diffculties" - Emil Nolde </i> </li>
+                 <li class="side_bar_font"></li>
                
                   <% if UserCircle.find_by(user_id: current_user.id, teacher: true) != nil %>
                  <% UserCircle.where(user_id: current_user.id, teacher: true).each do |x| %>
@@ -93,24 +94,27 @@
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown"> - Add Pupils to "<%=Circle.find_by(id: x.circle_id).name %>" </a>
                               <ul class="dropdown-menu" role="menu">
                                 <%Circle.find_by(id: x.circle_id).user_circles.where(circle_id: x.circle_id, teacher: false, accepted: false).each do |table|%>
-                                    <li> <h6 class="discussion"> <%="#{User.find_by(id: table.user_id).email}" %> </h6> <%= button_to "Accept", "/circles/#{table.id}", method: :patch %> </li>
+                                    <li> <h6 class="discussion"> <%="#{User.find_by(id: table.user_id).email}" %> </h6> <%= button_to "Accept", "/user_circles/#{table.id}", method: :patch %> </li>
                                       <%end%>
                               </ul> 
                           </li>  
-                            <li class="dropdown">
+                          <li class="side_bar_font">  <%= link_to "Discussion Pages for #{Circle.find_by(id: x.circle_id).name}", "/circles/#{x.circle_id}" %> </li>
+
+                        <!--   <li class="dropdown">
                             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"
                               > Master Circle Discussion Pages </a>
                                 <ul class="dropdown-menu" role="menu">
-                                  <% j = 1 %>
-                                  <%Comment.where(user_id: current_user.id, circle_id: x.circle_id,discussion_question: true).each do |comment| %> 
-                                      <%if comment == nil%> 
+                                  <% #j = 1 %>
+                                  <%#Comment.where(user_id: current_user.id, circle_id: x.circle_id,discussion_question: true).each do |comment| %> 
+                                      <%#if comment == nil%> 
                                         <li> <h3 > You haven't posted any discussion questions. </h3> </li> 
-                                      <%else%>
-                                        <li> <h6 class="discussion col-sm-12"> <%= link_to "#{j}. #{comment.body}", "/comments/#{comment.id}" %> </h6> </li>  <% j += 1 %>
-                                      <%end%>
-                                    <%end%>
+                                      <%#else%>
+                                        <li> <h6 class="discussion col-sm-12"> <%# link_to "#{j}. #{comment.body}", "/comments/#{comment.id}" %> </h6> </li>  <%# j += 1 %>
+                                      <%#end%>
+                                    <%#end%>
                                 </ul>
-                          </li>
+                          </li> <br> -->
+                         
                           <li class="dropdown">
                             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Students in Circle </a>
                               <ul class="dropdown-menu" role="menu">
@@ -118,11 +122,12 @@
                                     <% if (user.id == current_user.id or UserCircle.find_by(user_id: user.id, accepted: false)) %>
                                         <%nil%>
                                     <%else%> 
-                                       <li> <h6 class="discussion"> <%= link_to "#{user.email}", "/private_discussion/#{user.id}" %> </h6> </li>
+                                       <li><h6 class="discussion"> <%= link_to "#{user.email}", "/private_discussion/#{user.id}" %> </h6> </li>
+                                      
                                       <%end%>
                                   <%end%> 
                               </ul>  
-                          </li>
+                          </li> <br>
                          
                           <li class="dropdown">
                              <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Add Question For Circle Discussion </a> 
@@ -142,15 +147,29 @@
                                 </li>
                               </ul>  
                           </li>
-                      </ul>
+                        <li class="side_bar_font"> <%= link_to "See Current Lesson Plan", "/circles/#{x.circle_id}" %> </li>
+
+                        <li class="side_bar_font"> <%= link_to "Edit/Update Lesson Plan for #{Circle.find_by(id: x.circle_id).name}", "/circles/#{x.circle_id}/edit" %> </li>
+                    </ul>
                   </li>
                   <%end%>
               <%else%>
                 <li> <h3> You haven't started any Circles! </h3> </li>
                <%end%>
-                <li><a href="/circles/new"> -[Start New Circle] </a></li>
-                 
-                    
+                <li class="dropdown">
+                  <a class="side_bar_font" href="" class="dropdown-toggle" data-toggle="dropdown">[Start New Circle]</a> 
+                    <ul class="dropdown-menu" role="menu">
+                      <li> <%= form_tag "/circles", method: :post do %>
+                          <div align="center" rows="3">
+                            <%= label_tag :name %>
+                            <%= text_field_tag :name %>
+                            <%= submit_tag "Create Circle" %>
+                          </div>
+                          <%end%>
+                      </li>
+                    </ul>
+                  </li>
+
 <!--/////////////////////////////////////////////-->
           </ul>
         </li>
@@ -160,8 +179,8 @@
          <li class="dropdown">
            <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> My Student Circles  </a> 
             <ul class="dropdown-menu" role="menu">
-                <li class="side_bar_font">  <i> "You are always a student, never a master.  You have to keep moving forward" - Conrad Hall </i> </li> 
-                <% if UserCircle.find_by(user_id: current_user.id, teacher: false) != nil %>
+                <li class="side_bar_font">  </li> 
+                <% if UserCircle.find_by(user_id: current_user.id, teacher: false, accepted: true) != nil %>
                   <% UserCircle.where(user_id: current_user.id, teacher: false).each do |x| %>
                   <li class="dropdown">
                     <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= Circle.find_by(id: x.circle_id).name %> </font> </a> 
@@ -174,40 +193,36 @@
                               <%end%>
                             </ul>
                         </li>
-                        <li class="dropdown">
-                          <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Discussion Circles </font> </a>
-                          <ul class="dropdown-menu" role="menu">
-                           <% j = 1 %>
-                              <%Comment.where(user_id: User.find_by(id: UserCircle.find_by(circle_id: x.circle_id, teacher: true).user_id), circle_id: x.circle_id,discussion_question: true).each do |comment| %> 
-                                  <%if comment == nil%> 
-                                    <li> <h6> Today this circle's master stands silent. For the journey down the path to enlightenment is a long one. Today you may rest.</h6> </li> 
-                                      <%else%>
-                                        <li> <h6 class="discussion"> <%= link_to "#{j}. #{comment.body}", "/comments/#{comment.id}" %> </h6> </li>  
-                                          <%j += 1 %>
-                                    <%end%>
-                                  <%end%>
-                            </ul>
+                        <li class="side_bar_font"> <%= link_to "Discussion Page for #{Circle.find_by(id: x.circle_id).name}", "/circles/#{x.circle_id}" %> </li>
+
+                     
                         
                         <li class="dropdown">
-                          <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Ask a Question</font> </a>
+                          <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Ask a Question or Update Your Current One</font> </a>
                           <ul class="dropdown-menu" role="menu">
                             <li> 
                                <%=form_tag '/questions', method: :post  do  %>
                                  <div id="comment_form">
-                                    <textarea rows="3" name="body" id="body" placeholder="Add Question"></textarea>
+                                    <textarea rows="3" name="body" id="body" placeholder="<%= QuestionAnswer.find_by(user_id: current_user.id).body unless QuestionAnswer.find_by(user_id: current_user.id) == nil %>" ></textarea>
                                     <%=hidden_field_tag :user_id, current_user.id%> 
                                     <%=hidden_field_tag :circle_id, x.circle_id %>
                                     <%=hidden_field_tag :teacher, false %>
                                     <%=submit_tag "Ask Question" %>
                                   </div>
                                   <%end%>
-                            </li>
+                              </li>
                           </ul>
-                     
+                        </li>
+                         <%if QuestionAnswer.find_by(user_id: current_user.id, circle_id: x.circle_id) %>
+                          <li><h6 id="active_question"> Your Active Question </h6></li>
+                          <li> <h6 class="discussion"> <%= link_to "#{QuestionAnswer.find_by(user_id: current_user.id, circle_id: x.circle_id).body}", "/private_discussion/#{QuestionAnswer.find_by(user_id: current_user.id, circle_id: x.circle_id).id}" %> </h6> </li>
+                          <%end%>
+
+
                      </ul>
                     <%end%>
                 <%else%> 
-                  <li> You haven't joined any Circles yet! </li>
+                  <li> <h3> You haven't joined any Circles yet! </h3> </li>
                 <%end%>
             </ul>
           </li>
@@ -248,7 +263,7 @@
             </ul>
           </li> -->
       
-           <li> <a class="side_bar_font" href="/pages/<%=current_user.id%>"> Teaching Resources </a> </li>
+           <!-- <li> <a class="side_bar_font" href="/pages/<%=current_user.id%>"> Teaching Resources </a> </li> -->
             
             
           <li class="dropdown">
@@ -262,7 +277,7 @@
                            <% if UserCircle.find_by(user_id: current_user.id, circle_id: circle, teacher: true) != nil %>
                                   <%nil%>
                               <%else%> 
-                         <li><%= link_to "Leave #{circle.name}", "/circles/#{circle.id}", method: :patch %> </li>
+                         <li><%= link_to "Leave #{circle.name}", "/user_circles/#{circle.id}", method: :delete %> </li>
                               <%end%>
                            <%end%>
                       </ul>
@@ -270,17 +285,8 @@
                 </li>
                    
                 <li>
-                    <li class="dropdown">
-                      <h2> <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown">Update Profile Pic</a> </h2>
-                      <ul class="dropdown-menu" role="menu">
-                        <li> <%= form_tag "/pages/#{current_user.id}", method: :post, multipart: true do %>
-                        <%= file_field_tag :src %>
-                        <%= submit_tag "Submit" %>
-                        <%end%>
-                        </li>
-                      </ul>
-                    </li>
-                  </li>
+                 
+                </li>
             </ul>
           
 
@@ -288,7 +294,7 @@
 
           </li>
               <li><p></p></li>
-               <li> <font face="cursive"><%= link_to "Sign Out", '/users/sign_out', method: :delete %></font> </li>
+               <li class="side_bar_font"> <%= link_to "Sign Out", '/users/sign_out', method: :delete %>  </li>
 
               <li> <p></p> </li>
               
@@ -318,15 +324,19 @@
 
 
 
-<div class="container-fluid" align="center">
+
+<div class="container">
+  <div class="container" style="margin-left:200px;" align="right">
      <% flash.each do |name, message| %>
-  <div class="alert alert-<%= name %> alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><p><font color="blue"> <%= message %> </font></p>
+  <div id="flash-message" class="alert alert-<%= name %> alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><p><h6><font color="blue"> <%= message %> </font></h6></p>
   </div>
   <% end %>
 </div>
-
+    
 <%= yield %>
+
+</div>
 
   <script src="/assets/js/jquery-2.1.4.min.js"></script>
   <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
@@ -348,7 +358,13 @@
 
 
 
+   </div> 
 
-</body>
+<!--    <script type="text/javascript">
+    setTimeout(function() { 
+      document.getElementById("flash-message").remove();
+    }, 5000);
+   </script>
+ --></body>
 </html>
 

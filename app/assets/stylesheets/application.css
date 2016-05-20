@@ -14,7 +14,16 @@
  *= require_self
  */
 
+textarea { 
+  color: black !important;
+ }
 
+#active_question {  
+  text-decoration: underline;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+  color: #ffffe6;
+}
 
 h6.discussion { 
   color: #ffffe6;
@@ -25,9 +34,12 @@ h6.discussion {
   font-family: "Times New Roman", Times, serif;
  }
 
+p { 
+  font-size: 16px;
+}
+
 body {
   font-family: "Times New Romane", Times, serif;
-  font-size: 13px;
 }
 
 #comment_form input, #comment_form textarea {
@@ -43,6 +55,7 @@ body {
 
 #comment_form textarea {
   width: 350px;
+  
 }
 
 #comment_form input[type="submit"] {
@@ -74,3 +87,4 @@ body {
   background: linear-gradient(top, #ddd, #aaa); 
   border: 1px solid #999;
 }
+
