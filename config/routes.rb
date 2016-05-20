@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   patch '/circles/:id' => 'circles#update'
   post '/circles' => 'circles#create'
   post '/search_circles' => 'circles#search_for_circle'
-  
+  delete '/circles/:id' => 'circles#destroy'
 
 #########################################################################  
   patch '/user_circles/:id' => 'user_circles#update'

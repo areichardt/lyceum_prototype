@@ -12,7 +12,7 @@ class CommentsController < ApplicationController
       circle_id: params[:circle_id],
       discussion_question: params[:discussion_question]
       )
-    redirect_to "/"
+    redirect_to "/circles/#{@comment.circle_id}"
   end 
  
   def update 

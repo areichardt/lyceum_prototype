@@ -15,7 +15,7 @@
         <%=submit_tag "Edit Question" %>
       </div>
     <%end%>
-    <%= link_to "Delete Discussion", "/comments/#{@comment.id}", method: :delete, class: 'btn btn-default' %>
+    <%= link_to "Delete Discussion", "/comments/#{@comment.id}", method: :delete, class: 'btn btn-dark anim-scroll' %>
 <%else%>
   <%nil%>
 <%end%>

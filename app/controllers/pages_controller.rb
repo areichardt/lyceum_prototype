@@ -6,8 +6,7 @@ class PagesController < ApplicationController
     if current_user == nil
       redirect_to '/users/sign_in' 
     elsif current_user.admin == false
-     
-      @user = current_user
+     @user = current_user
       render 'home.html.erb'
     else 
       @all_images = Image.all

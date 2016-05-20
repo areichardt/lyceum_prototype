@@ -43,8 +43,15 @@ class CirclesController < ApplicationController
     redirect_to '/'
   end
   
+  def destroy 
+    @circle = Circle.find_by(id: params[:id])
+    user_circles = UserCircle.where(circle_id: @circle.id).each {|x| x.destroy}
+    @circle.destroy
+    flash[:success] = "You disbanded one of your Circles"
+    redirect_to '/'
+  end
 
-   def search_for_circle
+  def search_for_circle
     if params[:name] == ("all" || "All")
       @circles = Circle.all
     else

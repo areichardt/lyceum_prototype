@@ -2,7 +2,7 @@
 
 <div align="center" id="lesson_plan"> 
   <hr size="20">
-  <h1 id="circle_font"> <i> <%="#{@circle.name}" %> Active Discussion Circles </i> </h1> 
+  <h1 id="circle_font"> <i> "<%="#{@circle.name}" %>" Active Discussion Circles </i> </h1> 
   <hr size="20">
   <ol id="circle_font">
    <%Comment.where(circle_id: @circle.id, discussion_question: true).each do |x|%>
@@ -12,6 +12,21 @@
     <p></p>
     <%end%> 
   </ol>
+
+
+<% if UserCircle.find_by(user_id: current_user.id, circle_id: @circle.id, teacher: true) %>
+  <%=form_tag '/comments', method: :post  do  %>
+  <div id="comment_form">
+    <textarea rows="3" name="body" id="body" placeholder="Add Question"></textarea>
+    <%=hidden_field_tag :user_id, current_user.id%> 
+    <%=hidden_field_tag :circle_id, @circle.id %>
+    <%=hidden_field_tag :discussion_question, true %>
+    <%=submit_tag "Add Discussion Question" %>
+   <%end%>
+  </div>
+<%else%>
+  <%nil%> 
+<%end%>
 </div>
 
 

@@ -98,7 +98,7 @@
                                       <%end%>
                               </ul> 
                           </li>  
-                          <li class="side_bar_font">  <%= link_to "Discussion Pages for #{Circle.find_by(id: x.circle_id).name}", "/circles/#{x.circle_id}" %> </li>
+                          <li class="side_bar_font">  <%= link_to "Discussion Pages for #{Circle.find_by(id: x.circle_id).name} (#{Comment.where(circle_id: x.circle_id).length})", "/circles/#{x.circle_id}" %> </li>
 
                         <!--   <li class="dropdown">
                             <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"
@@ -122,7 +122,7 @@
                                     <% if (user.id == current_user.id or UserCircle.find_by(user_id: user.id, accepted: false)) %>
                                         <%nil%>
                                     <%else%> 
-                                       <li><h6 class="discussion"> <%= link_to "#{user.email}", "/private_discussion/#{user.id}" %> </h6> </li>
+                                       <li class="discussion">  <%= link_to "#{user.email}", "/private_discussion/#{user.id}" %> </li>
                                       
                                       <%end%>
                                   <%end%> 
@@ -140,16 +140,12 @@
                                       <%=hidden_field_tag :circle_id, x.circle_id %>
                                       <%=hidden_field_tag :discussion_question, true %>
                                       <%=submit_tag "Add Discussion Question" %>
-
-                                
                                     </div>
                                   <%end%>
                                 </li>
                               </ul>  
                           </li>
-                        <li class="side_bar_font"> <%= link_to "See Current Lesson Plan", "/circles/#{x.circle_id}" %> </li>
-
-                        <li class="side_bar_font"> <%= link_to "Edit/Update Lesson Plan for #{Circle.find_by(id: x.circle_id).name}", "/circles/#{x.circle_id}/edit" %> </li>
+                        
                     </ul>
                   </li>
                   <%end%>
@@ -181,7 +177,7 @@
             <ul class="dropdown-menu" role="menu">
                 <li class="side_bar_font">  </li> 
                 <% if UserCircle.find_by(user_id: current_user.id, teacher: false, accepted: true) != nil %>
-                  <% UserCircle.where(user_id: current_user.id, teacher: false).each do |x| %>
+                  <% UserCircle.where(user_id: current_user.id, teacher: false, accepted: true).each do |x| %>
                   <li class="dropdown">
                     <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= Circle.find_by(id: x.circle_id).name %> </font> </a> 
                       <ul class="dropdown-menu" role="menu">
@@ -193,7 +189,7 @@
                               <%end%>
                             </ul>
                         </li>
-                        <li class="side_bar_font"> <%= link_to "Discussion Page for #{Circle.find_by(id: x.circle_id).name}", "/circles/#{x.circle_id}" %> </li>
+                        <li class="side_bar_font"> <%= link_to "Discussion Page for #{Circle.find_by(id: x.circle_id).name} (#{Comment.where(circle_id: x.circle_id).length})", "/circles/#{x.circle_id}" %> </li>
 
                      
                         
@@ -282,6 +278,18 @@
                            <%end%>
                       </ul>
                     </li>
+                  <li class="dropdown">
+                      <h2> <a class="side_bar_font" href="#" class="dropdown-toggle" data-toggle="dropdown"> Disband One Of Your Circle's </a> </h2>
+                      <ul class="dropdown-menu" role="menu">
+                         <% current_user.circles.each do |circle| %>
+                           <% if UserCircle.find_by(user_id: current_user.id, circle_id: circle, teacher: true) == nil %>
+                                  <%nil%>
+                              <%else%> 
+                         <li><%= link_to "Disband #{circle.name}", "/circles/#{circle.id}", method: :delete %> </li>
+                              <%end%>
+                           <%end%>
+                      </ul>
+                    </li>
                 </li>
                    
                 <li>
@@ -296,7 +304,8 @@
               <li><p></p></li>
                <li class="side_bar_font"> <%= link_to "Sign Out", '/users/sign_out', method: :delete %>  </li>
 
-              <li> <p></p> </li>
+              <li> <p></p> </li> <br>
+              <li> <i> <font face="Times" size="1"> "The roots of education are bitter, but the fruit is sweet." - Aristotle </font> </i> </h6> </li>
               
             
        
@@ -360,11 +369,11 @@
 
    </div> 
 
-<!--    <script type="text/javascript">
+   <script type="text/javascript">
     setTimeout(function() { 
       document.getElementById("flash-message").remove();
     }, 5000);
    </script>
- --></body>
+</body>
 </html>
 
