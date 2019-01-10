@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   has_many :discussion_comments
   has_many :question_answers
   has_many :answers
-
+  has_many :lesson_plans
 
 # def configure_permitted_parameters
   #   devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password #:image) }

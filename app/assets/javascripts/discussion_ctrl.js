@@ -1,5 +1,6 @@
 (function() {
   angular.module("app").controller("discussionCtrl", function($scope, $http, $timeout) {
+
     var myDataRef = new Firebase('https://crackling-inferno-8576.firebaseio.com/');
 
     $scope.setup = function(comment_id, email) {
@@ -15,7 +16,7 @@
           if (message.comment_id === $scope.comment_id) {
             $scope.messages.push(message);
           } else {
-            console.log(message, $scope.comment_id);
+            console.log('problem', message, $scope.comment_id);
           }
         });
       });
@@ -25,6 +26,7 @@
     };
 
     $scope.createMessage = function(inputText) {
+      // console.log('hello');
       myDataRef.push({name: $scope.email, text: inputText, comment_id: $scope.comment_id});
       $scope.newMessageText = '';
     };

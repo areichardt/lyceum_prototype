@@ -122,7 +122,7 @@
                                     <% if (user.id == current_user.id or UserCircle.find_by(user_id: user.id, accepted: false)) %>
                                         <%nil%>
                                     <%else%> 
-                                       <li class="discussion">  <%= link_to "#{user.email}", "/private_discussion/#{user.id}" %> </li>
+                                       <li class="discussion"> <font color="blue"> <%= link_to "#{user.email}", "/private_discussion/#{user.id}" %> </font> </li>
                                       
                                       <%end%>
                                   <%end%> 
@@ -145,7 +145,8 @@
                                 </li>
                               </ul>  
                           </li>
-                        
+                         
+                    
                     </ul>
                   </li>
                   <%end%>
@@ -346,7 +347,8 @@
 <%= yield %>
 
 </div>
-
+  
+  
   <script src="/assets/js/jquery-2.1.4.min.js"></script>
   <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
   <script src="/assets/js/jquery.superslides.min.js"></script>
@@ -369,11 +371,6 @@
 
    </div> 
 
-   <script type="text/javascript">
-    setTimeout(function() { 
-      document.getElementById("flash-message").remove();
-    }, 5000);
-   </script>
 </body>
 </html>
 

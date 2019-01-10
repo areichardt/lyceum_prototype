@@ -4,7 +4,7 @@
 
 <div align="right">
 <% if (@question != nil) && (@question.user_id == current_user.id) %>
-  <%= link_to "Delete Current Question", "/questions/#{@question.id}", method: :delete, class: 'btn btn-default' %>
+  <%= link_to "Delete Current Question", "/questions/#{@question.id}", method: :delete, class: 'btn btn-dark anim-scroll' %>
 <%else%> 
    <%nil%>
 <%end%>

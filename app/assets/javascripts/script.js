@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    $('button').click(function() {
-        $('#comment_board').fadeToggle('slow');
+    $('alert').click(function() {
+        $('#flash-message').fadeOut(1000);
     });
 });
+

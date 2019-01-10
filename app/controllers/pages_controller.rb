@@ -15,31 +15,14 @@ class PagesController < ApplicationController
     end 
   end
   
-  # def pdf
-  #   if Circle.find_by(id: params[:id]) 
-  #     @circle = Circle.find_by(id: params[:id]) 
-  #       respond_to do |format|
-  #       format.html 
-  #        format.pdf do 
-  #         pdf = CirclePdf.new(@circle, view_context)
-  #         send_data pdf.render, 
-  #         filename: "#{@circle.id}.pdf",
-  #         type: "application/pdf", 
-  #         disposition: "inline"
-  #       end 
-  #     end
-  #   end
-  # end
-
-    def user_resources
-      @user = User.find_by(id: params[:id])
-    end
+  def user_resources
+    @user = User.find_by(id: params[:id])
+  end
   
   private 
 
   def new_image
     @image = Image.new
-  
   end
   
  
